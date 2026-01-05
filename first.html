@@ -405,3 +405,295 @@
     <script src="assets/js/script.js"></script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>*** - 个人博客</title>
+    <link rel="stylesheet" href="css.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- 视频背景 -->
+    <video class="bg-video" autoplay muted loop playsinline>
+        <source src="video/lizi.mp4" type="video/mp4">
+    </video>
+    
+    <!-- 设置面板 -->
+    <div class="settings-panel">
+        <div class="settings-header">
+            <h3>✨ 个性化设置</h3>
+            <button class="close-settings" id="closeSettings">✕</button>
+        </div>
+        
+        <div class="settings-group">
+            <label for="bgUpload">🖼️ 自定义壁纸：</label>
+            <input type="file" id="bgUpload" accept="image/*">
+            <button class="btn-small" onclick="resetBg()">重置壁纸</button>
+        </div>
+        
+        <div class="settings-group">
+            <label for="colorPicker">🎨 主题颜色：</label>
+            <input type="color" id="colorPicker" value="#6366f1">
+        </div>
+        
+        <div class="settings-group">
+            <label for="fontSizeSlider">📝 字体大小：</label>
+            <input type="range" id="fontSizeSlider" min="12" max="20" value="16">
+            <span id="fontSizeDisplay">16px</span>
+        </div>
+        
+        <div class="settings-group">
+            <label for="animationToggle">
+                <input type="checkbox" id="animationToggle" checked>
+                🎬 动画效果
+            </label>
+        </div>
+        
+        <div class="settings-group">
+            <button class="btn-primary" onclick="saveSetting()">💾 保存设置</button>
+            <button class="btn-secondary" onclick="resetAllSettings()">🔄 恢复默认</button>
+        </div>
+    </div>
+
+    <!-- 设置按钮 -->
+    <button class="settings-btn" id="settingsBtn" title="打开设置">⚙️</button>
+
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-logo">
+                <i class="fas fa-code"></i> <span class="logo-name"><span class="char">杨</span><span class="char">晓</span><span class="char">宇</span></span><span class="logo-tag">&lt;/&gt;</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link">首页</a></li>
+                <li><a href="#about" class="nav-link">关于我</a></li>
+                <li><a href="#blog" class="nav-link">博客</a></li>
+                <li><a href="#contact" class="nav-link">联系</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <main class="container">
+        <!-- 首页英雄区 -->
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <div class="avatar">
+                    <img src="img\avatar.png" alt="***">
+                </div>
+                <h1 class="hero-title">***</h1>
+                <p class="hero-subtitle">Full Stack Developer | 技术探索者 | 创意实现者</p>
+                <div class="time-display" id="timeDisplay"></div>
+                <button class="cta-btn" onclick="window.location.href='tencent://message/?uin=【***】'">立即联系</button>
+            </div>
+            <div class="floating-shapes">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
+            </div>
+        </section>
+
+        <!-- 关于我 -->
+        <section class="about" id="about">
+            <div class="section-header">
+                <h2>👤 关于我</h2>
+                <div class="header-line"></div>
+            </div>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>欢迎来到我的个人博客！这是一个记录我学习、工作和创意思考的空间。</p>
+                    <p>我热情于Web开发、视频设计和新技术探索。在这里，你将看到我的项目、文章和想法分享。</p>
+                    <p>我将偶尔更新我创造的视频内容</p>
+                    <p><em>【内容待填写】</em></p>
+                </div>
+                <div class="skills">
+                    <h3>技能标签</h3>
+                    <div class="skill-tags">
+                        <span class="tag">HTML/CSS</span>
+                        <span class="tag">JavaScript</span>
+                        <span class="tag">Adobe PR</span>
+                        <span class="tag">Adobe AE</span>
+                        <span class="tag">Resolve</span>
+                        <span class="tag">Python</span>
+                        <span class="tag">【更多待填写】</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 博客区 -->
+        <section class="blog" id="blog">
+            <div class="section-header">
+                <h2>📚 最新文章</h2>
+                <div class="header-line"></div>
+            </div>
+            <div class="blog-grid">
+                <article class="blog-card">
+                    <div class="blog-header">
+                        <h3>【AE校章】</h3>
+                        <span class="blog-date">【2025.10.30】</span>
+                    </div>
+                    <div class="video-container">
+                        <video class="blog-video" id="video1">
+                            <source src="video/xiaozhang.mp4" type="video/mp4">
+                            您的浏览器不支持视频播放
+                        </video>
+                        <div class="video-controls">
+                            <button class="control-btn play-btn" onclick="togglePlay(this)">▶ 播放</button>
+                            <input type="range" class="speed-slider" min="0.5" max="2" step="0.5" value="1" onchange="setPlaybackSpeed(this)" title="倍速">
+                            <span class="speed-label" id="speed1">1x</span>
+                            <button class="control-btn fullscreen-btn" onclick="toggleFullscreen(this)">⛶ 全屏</button>
+                        </div>
+                    </div>
+                    <div class="blog-tags">
+                        <span class="blog-tag">【视频演示】</span>
+                        <span class="blog-tag">【AE设计】</span>
+                    </div>
+                    <a href="#" class="read-more">阅读更多 →</a>
+                </article>
+
+                <article class="blog-card">
+                    <div class="blog-header">
+                        <h3>【LOGO】</h3>
+                        <span class="blog-date">【2025.11.2】</span>
+                    </div>
+                    <div class="video-container">
+                        <video class="blog-video" id="video2">
+                            <source src="video/xiaozhang2.mp4" type="video/mp4">
+                            您的浏览器不支持视频播放
+                        </video>
+                        <div class="video-controls">
+                            <button class="control-btn play-btn" onclick="togglePlay(this)">▶ 播放</button>
+                            <input type="range" class="speed-slider" min="0.5" max="2" step="0.5" value="1" onchange="setPlaybackSpeed(this)" title="倍速">
+                            <span class="speed-label" id="speed2">1x</span>
+                            <button class="control-btn fullscreen-btn" onclick="toggleFullscreen(this)">⛶ 全屏</button>
+                        </div>
+                    </div>
+                    <div class="blog-tags">
+                        <span class="blog-tag">【视频演示】</span>
+                        <span class="blog-tag">【LOGO设计】</span>
+                    </div>
+                    <a href="#" class="read-more">阅读更多 →</a>
+                </article>
+
+                <article class="blog-card">
+                    <div class="blog-header">
+                        <h3>【待定...】</h3>
+                        <span class="blog-date">【发布日期待定】</span>
+                    </div>
+                    <p class="blog-excerpt">【内容预览待填写】</p>
+                    <div class="blog-tags">
+                        <span class="blog-tag">【标签1】</span>
+                        <span class="blog-tag">【标签2】</span>
+                    </div>
+                    <a href="#" class="read-more">阅读更多 →</a>
+                </article>
+            </div>
+        </section>
+
+        <!-- 评论区 -->
+        <section class="comments" id="comments">
+            <div class="section-header">
+                <h2>💬 评论与反馈</h2>
+                <div class="header-line"></div>
+            </div>
+            
+            <div class="comment-form">
+                <h3>留下你的评论</h3>
+                <input type="text" id="commentName" placeholder="你的名字" maxlength="50">
+                <input type="email" id="commentEmail" placeholder="你的邮箱（不公开）" maxlength="100">
+                <textarea id="commentText" placeholder="说些什么吧..." maxlength="500" rows="4"></textarea>
+                <button class="btn-primary" onclick="submitComment()">发送评论</button>
+            </div>
+
+            <div class="comments-list" id="commentsList">
+                <div class="comment-item">
+                    <div class="comment-header">
+                        <strong>示例用户</strong>
+                        <span class="comment-time">刚刚</span>
+                    </div>
+                    <p class="comment-content">这是一条示例评论。你的评论将出现在这里！</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 联系方式 -->
+        <section class="contact" id="contact">
+            <div class="section-header">
+                <h2>📧 联系我</h2>
+                <div class="header-line"></div>
+            </div>
+            <div class="contact-grid">
+                <a href="https://github.com/yangsang071024/My-blog" class="contact-card" target="_blank" title="GitHub">
+                    <i class="fab fa-github"></i>
+                    <h3>GitHub</h3>
+                    <p>我的GitHub仓库</p>
+                </a>
+
+                <a href="tencent://message/?uin=【您的QQ号】" class="contact-card" title="QQ">
+                    <i class="fab fa-qq"></i>
+                    <h3>QQ</h3>
+                    <p>【***】</p>
+                </a>
+
+                <a href="mailto:【***】" class="contact-card" title="***">
+                    <i class="fas fa-envelope"></i>
+                    <h3>邮箱</h3>
+                    <p>【***】</p>
+                </a>
+
+                <a href="#" class="contact-card" title="微信">
+                    <i class="fab fa-weixin"></i>
+                    <h3>微信</h3>
+                    <p>【***】</p>
+                </a>
+            </div>
+        </section>
+
+        <!-- 统计信息 -->
+        <section class="stats">
+            <div class="stat-item">
+                <div class="stat-number" data-count="8">0</div>
+                <div class="stat-label">项目完成</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-count="13">0</div>
+                <div class="stat-label">文章发布</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-count="512">0</div>
+                <div class="stat-label">访问人数</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-count="26">0</div>
+                <div class="stat-label">技能掌握</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <p>&copy; 2025 杨晓宇的个人博客 | <span id="footerYear"></span></p>
+        <p>
+            <a href="#">隐私政策</a> | 
+            <a href="#">使用条款</a> | 
+            <a href="#">联系我们</a>
+        </p>
+        <p>Crafted with <i class="fas fa-heart" style="color: #ff6b6b;"></i> and ☕</p>
+    </footer>
+
+    <!-- 返回顶部按钮 -->
+    <button class="back-to-top" id="backToTop" title="返回顶部">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="script.js"></script>
+</body>
+</html>
