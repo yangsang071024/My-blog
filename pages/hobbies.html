@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>兴趣爱好 - 杨晓宇</title>
+    <link rel="stylesheet" href="../assets/css/css.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 兴趣爱好页面专属样式 */
+        .hobbies-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 100px 20px 80px;
+        }
+
+        .hobbies-header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .hobbies-title {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, var(--primary-color), var(--tertiary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+        }
+
+        .hobbies-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+        }
+
+        /* 图片画廊 */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .gallery-item {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            animation: cardFadeIn 0.6s ease-out backwards;
+        }
+
+        .gallery-item:nth-child(1) { animation-delay: 0.1s; }
+        .gallery-item:nth-child(2) { animation-delay: 0.2s; }
+        .gallery-item:nth-child(3) { animation-delay: 0.3s; }
+        .gallery-item:nth-child(4) { animation-delay: 0.4s; }
+        .gallery-item:nth-child(5) { animation-delay: 0.5s; }
+        .gallery-item:nth-child(6) { animation-delay: 0.6s; }
+
+        .gallery-item:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--primary-color);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.3);
+        }
+
+        .gallery-image-wrapper {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+            background: #1a1a1a;
+            cursor: pointer;
+        }
+
+        .gallery-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+            display: block;
+            position: relative;
+            z-index: 1;
+            background: #1a1a1a;
+            opacity: 1;
+            visibility: visible;
+            min-height: 300px;
+        }
+        
+        /* 确保图片加载时显示 */
+        .gallery-image[src] {
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+        
+        /* 图片加载失败时的样式 */
+        .gallery-image[src=""],
+        .gallery-image:not([src]) {
+            background: linear-gradient(135deg, var(--primary-color), var(--tertiary-color));
+            opacity: 0.3;
+        }
+
+        .gallery-item:hover .gallery-image {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 60%, rgba(15, 23, 42, 0.9));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 20px;
+            z-index: 2;
+            pointer-events: none; /* 允许点击穿透到图片 */
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-content {
+            padding: 25px;
+        }
+
+        /* 标题和描述并排显示 */
+        .gallery-title-wrapper {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .gallery-title {
+            font-size: 1.3rem;
+            margin: 0;
+            color: var(--text-color);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .gallery-title i {
+            color: var(--primary-color);
+        }
+
+        .gallery-description {
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-size: 1rem;
+            margin: 0;
+            display: inline;
+        }
+
+        .gallery-date {
+            color: var(--accent-color);
+            font-size: 0.9rem;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* 图片放大查看模态框 */
+        .image-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .image-modal.active {
+            display: flex;
+        }
+
+        .image-modal-content {
+            max-width: 90%;
+            max-height: 90vh;
+            position: relative;
+            animation: zoomIn 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .image-modal img {
+            max-width: 100%;
+            max-height: 70vh;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            display: block;
+        }
+
+        .image-modal-close {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .image-modal-close:hover {
+            transform: rotate(90deg) scale(1.1);
+            background: var(--tertiary-color);
+        }
+
+        .image-modal-info {
+            margin-top: 20px;
+            text-align: center;
+            color: #ffffff;
+            background: rgba(15, 23, 42, 0.8);
+            padding: 15px 25px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 100%;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .image-modal-title {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .image-modal-description {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .hobbies-title {
+                font-size: 2rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .gallery-image-wrapper {
+                height: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hobbies-container {
+                padding: 80px 15px 60px;
+            }
+
+            .hobbies-title {
+                font-size: 1.8rem;
+            }
+
+            .gallery-image-wrapper {
+                height: 200px;
+            }
+
+            .gallery-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="loader">
+        <div class="loader-spinner"></div>
+        <p>正在加载兴趣爱好...</p>
+    </div>
+    
+    <!-- 视频背景 -->
+    <video class="bg-video" autoplay muted loop playsinline>
+        <source src="../assets/video/lizi.mp4" type="video/mp4">
+    </video>
+    
+    <!-- 设置面板 -->
+    <div class="settings-panel">
+        <div class="settings-header">
+            <h3>✨ 个性化设置</h3>
+            <button class="close-settings" id="closeSettings">✕</button>
+        </div>
+        
+        <div class="settings-group">
+            <label>🌗 主题模式：</label>
+            <button class="btn-small" onclick="toggleTheme()">切换模式</button>
+        </div>
+        
+        <div class="settings-group">
+            <label for="bgUpload">🖼️ 自定义壁纸：</label>
+            <input type="file" id="bgUpload" accept="image/*">
+            <button class="btn-small" onclick="resetBg()">重置壁纸</button>
+        </div>
+        
+        <div class="settings-group">
+            <label for="colorPicker">🎨 主题颜色：</label>
+            <input type="color" id="colorPicker" value="#6366f1">
+        </div>
+        
+        <div class="settings-group">
+            <label for="fontSizeSlider">📝 字体大小：</label>
+            <input type="range" id="fontSizeSlider" min="12" max="20" value="16">
+            <span id="fontSizeDisplay">16px</span>
+        </div>
+        
+        <div class="settings-group">
+            <label for="animationToggle">
+                <input type="checkbox" id="animationToggle" checked>
+                🎬 动画效果
+            </label>
+        </div>
+        
+        <div class="settings-group">
+            <button class="btn-primary" onclick="saveSetting()">💾 保存设置</button>
+            <button class="btn-secondary" onclick="resetAllSettings()">🔄 恢复默认</button>
+        </div>
+    </div>
+
+    <!-- 设置按钮 -->
+    <button class="settings-btn" id="settingsBtn" title="打开设置">⚙️</button>
+
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-logo">
+                <a href="../first.html" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-code"></i>
+                    <span class="logo-name"><span class="char">杨</span><span class="char">晓</span><span class="char">宇</span></span>
+                    <span class="logo-tag">&lt;/&gt;</span>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../first.html#home" class="nav-link">首页</a></li>
+                <li><a href="../first.html#about" class="nav-link">关于我</a></li>
+                <li><a href="../first.html#blog" class="nav-link">博客</a></li>
+                <li><a href="../first.html#contact" class="nav-link">联系</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <main class="hobbies-container">
+        <!-- 页面标题 -->
+        <div class="hobbies-header">
+            <h1 class="hobbies-title">
+                <i class="fas fa-images"></i> 兴趣爱好
+            </h1>
+            <p class="hobbies-subtitle">📸 瞬间定格，记录生活的美好时光</p>
+        </div>
+
+        <!-- 图片画廊 -->
+        <div class="gallery-grid">
+            <!-- 美食 -->
+            <div class="gallery-item reveal">
+                <div class="gallery-image-wrapper" onclick="openImageModal(encodeURI('../assets/img/hobby/饭.jpg'), '🍽️ 美食时光', '第一次做椒盐土豆，味道还行把，总之自己吃了不少')">
+                    <img src="../assets/img/hobby/饭.jpg" alt="椒盐土豆" class="gallery-image" data-src="../assets/img/hobby/饭.jpg" onerror="handleImageError(this);" onload="handleImageLoad(this);">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-expand" style="color: white; font-size: 2rem;"></i>
+                    </div>
+                </div>
+                <div class="gallery-content">
+                    <div class="gallery-title-wrapper">
+                        <h3 class="gallery-title">
+                            <i class="fas fa-utensils"></i> 美食时光
+                        </h3>
+                        <p class="gallery-description">2025年做的椒盐土豆，味道十分不错</p>
+                    </div>
+                    <div class="gallery-date">
+                        <i class="far fa-calendar"></i> 2025年
+                    </div>
+                </div>
+            </div>
+
+            <!-- 实习风景 -->
+            <div class="gallery-item reveal">
+                <div class="gallery-image-wrapper" onclick="openImageModal(encodeURI('../assets/img/hobby/实习风景.jpg'), '🌃 实习风景', '远是红尘不夜城，近如星河落水中。 我于桥上凭栏久，半看繁华半看灯。')">
+                    <img src="../assets/img/hobby/实习风景.jpg" alt="实习风景" class="gallery-image" data-src="../assets/img/hobby/实习风景.jpg" onerror="handleImageError(this);" onload="handleImageLoad(this);">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-expand" style="color: white; font-size: 2rem;"></i>
+                    </div>
+                </div>
+                <div class="gallery-content">
+                    <div class="gallery-title-wrapper">
+                        <h3 class="gallery-title">
+                            <i class="fas fa-mountain"></i> 实习风景
+                        </h3>
+                        <p class="gallery-description">下班的夜晚中也能欣赏此等风景，虽美，勿多看，易乏味</p>
+                    </div>
+                    <div class="gallery-date">
+                        <i class="far fa-calendar"></i> 实习期
+                    </div>
+                </div>
+            </div>
+
+            <!-- DIY装机 -->
+            <div class="gallery-item reveal">
+                <div class="gallery-image-wrapper" onclick="openImageModal('../assets/img/hobby/DIY.png', '🖥️ DIY装机', '我的选择困难症又犯了...')">
+                    <img src="../assets/img/hobby/DIY.png" alt="DIY装机" class="gallery-image" onerror="console.error('图片加载失败:', this.src); this.style.display='none'; this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#fff;background:#1a1a1a;\'><i class=\'fas fa-image\' style=\'font-size:3rem;opacity:0.5;\'></i></div>';">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-expand" style="color: white; font-size: 2rem;"></i>
+                    </div>
+                </div>
+                <div class="gallery-content">
+                    <div class="gallery-title-wrapper">
+                        <h3 class="gallery-title">
+                            <i class="fas fa-desktop"></i> DIY装机
+                        </h3>
+                        <p class="gallery-description">该组装一台什么样的台式电脑呢?不管了先来二十套预选吧.....</p>
+                    </div>
+                    <div class="gallery-date">
+                        <i class="far fa-calendar"></i> 2025年
+                    </div>
+                </div>
+            </div>
+
+            <!-- 笔记本改造 -->
+            <div class="gallery-item reveal">
+                <div class="gallery-image-wrapper" onclick="openImageModal(encodeURI('../assets/img/hobby/笔记本.jpg'), '💻 笔记本改造', '性能可谓是提升不小，就是手里怎么多了几颗螺丝？')">
+                    <img src="../assets/img/hobby/笔记本.jpg" alt="笔记本改造" class="gallery-image" onerror="console.error('图片加载失败:', this.src); this.style.display='none'; this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#fff;background:#1a1a1a;\'><i class=\'fas fa-image\' style=\'font-size:3rem;opacity:0.5;\'></i></div>';">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-expand" style="color: white; font-size: 2rem;"></i>
+                    </div>
+                </div>
+                <div class="gallery-content">
+                    <div class="gallery-title-wrapper">
+                        <h3 class="gallery-title">
+                            <i class="fas fa-laptop"></i> 笔记本改造
+                        </h3>
+                        <p class="gallery-description">为了便携性还是买一个笔记本吧,先拆机,再抹亿点导热凝胶,然后...</p>
+                    </div>
+                    <div class="gallery-date">
+                        <i class="far fa-calendar"></i> 2025年
+                    </div>
+                </div>
+            </div>
+
+            <!-- ComfyUI -->
+            <div class="gallery-item reveal">
+                <div class="gallery-image-wrapper" onclick="openImageModal('../assets/img/hobby/Comfyui.png', '🎨 AI生图', '模型过大，8g显存笔记本正在爆炸中...')">
+                    <img src="../assets/img/hobby/Comfyui.png" alt="ComfyUI" class="gallery-image" onerror="console.error('图片加载失败:', this.src); this.style.display='none'; this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#fff;background:#1a1a1a;\'><i class=\'fas fa-image\' style=\'font-size:3rem;opacity:0.5;\'></i></div>';">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-expand" style="color: white; font-size: 2rem;"></i>
+                    </div>
+                </div>
+                <div class="gallery-content">
+                    <div class="gallery-title-wrapper">
+                        <h3 class="gallery-title">
+                            <i class="fas fa-palette"></i> ComfyUI生图
+                        </h3>
+                        <p class="gallery-description">努力寻找模型和构想正反向提示词中...</p>
+                    </div>
+                    <div class="gallery-date">
+                        <i class="far fa-calendar"></i> 2025年
+                    </div>
+                </div>
+            </div>
+
+            <!-- 装机完成 -->
+            <div class="gallery-item reveal">
+                <div class="gallery-image-wrapper" onclick="openImageModal(encodeURI('../assets/img/hobby/xunlian.png'), '🛠️ 音色模型训练完成', '老伙计,训练完成了,可以休息了...')">
+                    <img src="../assets/img/hobby/xunlian.png" alt="装机完成" class="gallery-image" onerror="console.error('图片加载失败:', this.src); this.style.display='none'; this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#fff;background:#1a1a1a;\'><i class=\'fas fa-image\' style=\'font-size:3rem;opacity:0.5;\'></i></div>';">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-expand" style="color: white; font-size: 2rem;"></i>
+                    </div>
+                </div>
+                <div class="gallery-content">
+                    <div class="gallery-title-wrapper">
+                        <h3 class="gallery-title">
+                            <i class="fas fa-tools"></i> IndexTTS
+                        </h3>
+                        <p class="gallery-description">从音频选取到训练，每一步都是对TTS的热爱与追求。</p>
+                    </div>
+                    <div class="gallery-date">
+                        <i class="far fa-calendar"></i> 2025年
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 关于兴趣爱好 -->
+        <section class="about reveal" style="margin-top: 60px;">
+            <div class="section-header">
+                <h2>💭 关于我的兴趣爱好</h2>
+                <div class="header-line"></div>
+            </div>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>这里记录着我的生活点点滴滴和兴趣爱好。从美食烹饪到电脑DIY，从摄影记录到AI探索的每一个瞬间。</p>
+                    <p>我喜欢在忙碌的学习和工作之余，通过不同的方式放松自己，探索新事物，记录生活中的美好。</p>
+                    <p><em>生活不止眼前的代码，还有美食、风景和无限的创意！</em></p>
+                </div>
+                <div class="skills">
+                    <h3>兴趣标签</h3>
+                    <div class="skill-tags">
+                        <span class="tag">🍳 美食烹饪</span>
+                        <span class="tag">🖥️ 电脑DIY</span>
+                        <span class="tag">📸 摄影记录</span>
+                        <span class="tag">🎨 AI创作</span>
+                        <span class="tag">🔧 硬件改造</span>
+                        <span class="tag">🌃 风景欣赏</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 图片放大查看模态框 -->
+    <div class="image-modal" id="imageModal" onclick="closeImageModal(event)">
+        <div class="image-modal-content" onclick="event.stopPropagation()">
+            <button class="image-modal-close" onclick="closeImageModal()">✕</button>
+            <img id="modalImage" src="" alt="">
+            <div class="image-modal-info">
+                <div class="image-modal-title" id="modalTitle"></div>
+                <div class="image-modal-description" id="modalDescription"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 返回顶部按钮 -->
+    <button class="back-to-top" id="backToTop" title="返回顶部">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="../assets/js/script.js"></script>
+    <script>
+        // 图片加载错误处理和重试机制
+        function handleImageError(img, retryCount = 0) {
+            const maxRetries = 3;
+            const originalSrc = img.dataset.src || img.src;
+            
+            if (retryCount >= maxRetries) {
+                console.error('图片加载失败，已达到最大重试次数:', originalSrc);
+                img.style.display = 'none';
+                const placeholder = document.createElement('div');
+                placeholder.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#fff;background:#1a1a1a;';
+                placeholder.innerHTML = '<i class="fas fa-image" style="font-size:3rem;opacity:0.5;"></i>';
+                img.parentElement.appendChild(placeholder);
+                return;
+            }
+            
+            console.warn(`图片加载失败，正在重试 (${retryCount + 1}/${maxRetries}):`, originalSrc);
+            
+            // 使用编码后的路径重试
+            const encodedSrc = encodeURI(originalSrc);
+            
+            // 清除当前src，强制重新加载
+            img.src = '';
+            img.style.opacity = '0';
+            
+            // 延迟重试，避免立即重试
+            setTimeout(() => {
+                // 尝试使用编码路径
+                img.src = encodedSrc;
+                
+                // 如果编码路径也失败，尝试原始路径
+                img.onerror = function() {
+                    if (retryCount < maxRetries - 1) {
+                        // 尝试原始路径
+                        this.src = originalSrc;
+                        this.onerror = function() {
+                            handleImageError(this, retryCount + 1);
+                        };
+                    } else {
+                        handleImageError(this, retryCount + 1);
+                    }
+                };
+            }, 500 * (retryCount + 1)); // 递增延迟
+        }
+        
+        // 图片加载成功处理
+        function handleImageLoad(img) {
+            img.style.opacity = '1';
+            img.style.visibility = 'visible';
+            console.log('图片加载成功:', img.src);
+        }
+        
+        // 确保图片正确加载
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('.gallery-image');
+            
+            images.forEach(img => {
+                const originalSrc = img.dataset.src || img.src;
+                
+                // 如果src包含中文，使用编码路径
+                if (originalSrc && /[\u4e00-\u9fa5]/.test(originalSrc)) {
+                    const encodedSrc = encodeURI(originalSrc);
+                    img.src = encodedSrc;
+                    img.dataset.src = originalSrc; // 保存原始路径
+                }
+                
+                // 检查图片是否已加载
+                if (!img.complete || img.naturalHeight === 0) {
+                    // 图片未加载，添加加载监听
+                    img.addEventListener('error', function() {
+                        handleImageError(this, 0);
+                    });
+                    
+                    img.addEventListener('load', function() {
+                        handleImageLoad(this);
+                    });
+                } else {
+                    // 图片已加载
+                    handleImageLoad(img);
+                }
+            });
+            
+            // 预加载关键图片
+            const criticalImages = [
+                '../assets/img/hobby/饭.jpg',
+                '../assets/img/hobby/实习风景.jpg'
+            ];
+            
+            criticalImages.forEach(src => {
+                const img = new Image();
+                img.src = encodeURI(src);
+                img.onerror = function() {
+                    console.warn('预加载图片失败:', src);
+                };
+            });
+        });
+        
+        // 图片模态框功能
+        function openImageModal(imageSrc, title, description) {
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalDescription = document.getElementById('modalDescription');
+            
+            if (!modal || !modalImage) {
+                console.error('模态框元素未找到');
+                return;
+            }
+            
+            modalImage.src = imageSrc;
+            
+            if (modalTitle) {
+                modalTitle.textContent = title;
+            }
+            if (modalDescription) {
+                modalDescription.textContent = description;
+            }
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // 防止背景滚动
+        }
+
+        function closeImageModal(event) {
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = ''; // 恢复滚动
+            
+            // 如果点击的是关闭按钮，阻止事件冒泡
+            if (event && event.target.classList.contains('image-modal-close')) {
+                event.stopPropagation();
+            }
+        }
+
+        // ESC键关闭模态框
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('imageModal');
+                if (modal.classList.contains('active')) {
+                    closeImageModal();
+                }
+            }
+        });
+
+        // 初始化滚动显现效果
+        document.addEventListener('DOMContentLoaded', function() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            const revealOnScroll = () => {
+                const windowHeight = window.innerHeight;
+                const elementVisible = 150;
+
+                reveals.forEach((reveal) => {
+                    const elementTop = reveal.getBoundingClientRect().top;
+                    if (elementTop < windowHeight - elementVisible && !reveal.classList.contains('active')) {
+                        reveal.classList.add('active');
+                    }
+                });
+            };
+
+            window.addEventListener('scroll', revealOnScroll);
+            revealOnScroll(); // 初始检查
+        });
+    </script>
+</body>
+</html>
+

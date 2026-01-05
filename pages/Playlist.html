@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的歌单 - 杨晓宇</title>
+    <link rel="stylesheet" href="../assets/css/css.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="loader">
+        <div class="loader-spinner"></div>
+        <p>正在加载音乐...</p>
+    </div>
+    
+    <!-- 视频背景 -->
+    <video class="bg-video" autoplay muted loop playsinline>
+        <source src="../assets/video/lizi.mp4" type="video/mp4">
+    </video>
+    
+    <!-- 设置面板 -->
+    <div class="settings-panel">
+        <div class="settings-header">
+            <h3>✨ 个性化设置</h3>
+            <button class="close-settings" id="closeSettings">✕</button>
+        </div>
+        
+        <div class="settings-group">
+            <label>🌗 主题模式：</label>
+            <button class="btn-small" onclick="toggleTheme()">切换模式</button>
+        </div>
+        
+        <div class="settings-group">
+            <label for="bgUpload">🖼️ 自定义壁纸：</label>
+            <input type="file" id="bgUpload" accept="image/*">
+            <button class="btn-small" onclick="resetBg()">重置壁纸</button>
+        </div>
+        
+        <div class="settings-group">
+            <label for="colorPicker">🎨 主题颜色：</label>
+            <input type="color" id="colorPicker" value="#6366f1">
+        </div>
+        
+        <div class="settings-group">
+            <label for="fontSizeSlider">📝 字体大小：</label>
+            <input type="range" id="fontSizeSlider" min="12" max="20" value="16">
+            <span id="fontSizeDisplay">16px</span>
+        </div>
+        
+        <div class="settings-group">
+            <label for="animationToggle">
+                <input type="checkbox" id="animationToggle" checked>
+                🎬 动画效果
+            </label>
+        </div>
+        
+        <div class="settings-group">
+            <button class="btn-primary" onclick="saveSetting()">💾 保存设置</button>
+            <button class="btn-secondary" onclick="resetAllSettings()">🔄 恢复默认</button>
+        </div>
+    </div>
+
+    <!-- 设置按钮 -->
+    <button class="settings-btn" id="settingsBtn" title="打开设置">⚙️</button>
+
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-logo">
+                <a href="../first.html" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-code"></i>
+                    <span class="logo-name"><span class="char">杨</span><span class="char">晓</span><span class="char">宇</span></span>
+                    <span class="logo-tag">&lt;/&gt;</span>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="../first.html#home" class="nav-link">首页</a></li>
+                <li><a href="../first.html#about" class="nav-link">关于我</a></li>
+                <li><a href="../first.html#blog" class="nav-link">博客</a></li>
+                <li><a href="../first.html#contact" class="nav-link">联系</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <main class="playlist-container">
+        <!-- 页面标题 -->
+        <div class="playlist-header">
+            <h1 class="playlist-title">
+                <i class="fas fa-music"></i> 我的歌单
+            </h1>
+            <p class="playlist-subtitle">🎵 聆听旋律，享受音乐时光</p>
+        </div>
+
+        <!-- 播放器主区域 -->
+        <div class="player-section">
+            <!-- 专辑封面区域 -->
+            <div class="album-art-container">
+                <div class="album-art-wrapper">
+                    <img id="currentAlbumArt" src="../assets/img/avatar.png" alt="专辑封面" class="album-art">
+                    <div class="album-art-overlay">
+                        <div class="vinyl-record"></div>
+                    </div>
+                </div>
+                <div class="current-track-info">
+                    <h2 id="currentTrackTitle">暂无播放</h2>
+                    <p id="currentTrackArtist">艺术家</p>
+                </div>
+            </div>
+
+            <!-- 播放控制区域 -->
+            <div class="player-controls">
+                <!-- 进度条和时间显示 -->
+                <div class="progress-container">
+                    <span id="currentTime">0:00</span>
+                    <div class="progress-bar-wrapper">
+                        <input type="range" id="progressBar" class="progress-bar" min="0" max="100" value="0">
+                    </div>
+                    <span id="totalTime">0:00</span>
+                </div>
+
+                <!-- 主要控制按钮 -->
+                <div class="main-controls">
+                    <button class="control-btn-icon" id="shuffleBtn" title="随机播放">
+                        <i class="fas fa-random"></i>
+                    </button>
+                    <button class="control-btn-icon" id="prevBtn" title="上一首">
+                        <i class="fas fa-step-backward"></i>
+                    </button>
+                    <button class="control-btn-icon play-pause-btn" id="playPauseBtn" title="播放/暂停">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button class="control-btn-icon" id="nextBtn" title="下一首">
+                        <i class="fas fa-step-forward"></i>
+                    </button>
+                    <button class="control-btn-icon" id="repeatBtn" title="循环播放">
+                        <i class="fas fa-redo"></i>
+                    </button>
+                </div>
+
+                <!-- 音量控制 -->
+                <div class="volume-control">
+                    <button class="control-btn-icon" id="volumeBtn" title="音量">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                    <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="70">
+                    <span id="volumeValue">70%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 歌词显示区域 -->
+        <div class="lyrics-section">
+            <div class="lyrics-container" id="lyricsContainer">
+                <div class="lyrics-line">歌词将在播放时显示</div>
+            </div>
+        </div>
+
+        <!-- 播放列表区域 -->
+        <div class="playlist-section">
+            <div class="playlist-header-bar">
+                <h2>播放列表</h2>
+                <div class="playlist-actions">
+                    <button class="btn-small" id="clearPlaylistBtn" title="清空列表">清空</button>
+                    <button class="btn-small" id="addMusicBtn" title="添加音乐">+&nbsp;添加</button>
+                </div>
+            </div>
+            
+            <div class="playlist-items" id="playlistItems" style="display: none;">
+                <!-- 播放列表项将通过 JavaScript 动态生成 -->
+                <!-- 用户可以通过点击"添加"按钮或拖放音频文件来添加音乐 -->
+                <!-- 每首歌曲需要提供：音频文件、专辑封面图片（可选）、标题和艺术家信息 -->
+            </div>
+
+            <!-- 添加音乐提示 -->
+            <div class="playlist-empty" id="playlistEmpty">
+                <i class="fas fa-music"></i>
+                <p>播放列表为空</p>
+                <p class="playlist-empty-hint">点击"添加"按钮或拖放音频文件来添加音乐</p>
+            </div>
+        </div>
+
+        <!-- 隐藏的音频元素 -->
+        <audio id="audioPlayer" preload="metadata"></audio>
+    </main>
+
+    <!-- 返回顶部按钮 -->
+    <button class="back-to-top" id="backToTop" title="返回顶部">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/playlist.js"></script>
+</body>
+</html>
+

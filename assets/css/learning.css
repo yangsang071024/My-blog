@@ -1,0 +1,530 @@
+/* ============================================
+   学习路线页面样式
+   ============================================ */
+
+.learning-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 100px 20px 80px;
+}
+
+.learning-header {
+    text-align: center;
+    margin-bottom: 60px;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.learning-title {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    background: linear-gradient(135deg, var(--primary-color), var(--tertiary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 800;
+}
+
+.learning-subtitle {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    margin-bottom: 30px;
+}
+
+/* 总体进度 */
+.progress-summary {
+    max-width: 600px;
+    margin: 30px auto 0;
+    background: rgba(30, 41, 59, 0.5);
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+}
+
+.progress-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.progress-label {
+    color: var(--text-color);
+    font-weight: 600;
+    min-width: 80px;
+}
+
+.progress-bar-wrapper {
+    flex: 1;
+    height: 10px;
+    background: var(--border-color);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color), var(--tertiary-color));
+    transition: width 0.5s ease;
+    border-radius: 5px;
+}
+
+.progress-percent {
+    color: var(--primary-color);
+    font-weight: 600;
+    min-width: 50px;
+    text-align: right;
+}
+
+/* 学习路径流程图 */
+.learning-path-section {
+    background: rgba(30, 41, 59, 0.5);
+    border-radius: 20px;
+    padding: 40px;
+    margin-bottom: 40px;
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+}
+
+.section-title {
+    font-size: 2rem;
+    margin-bottom: 30px;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.path-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.path-stage {
+    background: rgba(99, 102, 241, 0.1);
+    border: 2px solid var(--primary-color);
+    border-radius: 15px;
+    padding: 30px 25px;
+    text-align: center;
+    min-width: 180px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.path-stage:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+    background: rgba(99, 102, 241, 0.2);
+}
+
+.path-stage.active {
+    background: rgba(99, 102, 241, 0.3);
+    border-color: var(--tertiary-color);
+}
+
+.stage-icon {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+}
+
+.path-stage h3 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    color: var(--text-color);
+}
+
+.path-stage p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.path-arrow {
+    font-size: 2rem;
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+/* 知识树状图 */
+.knowledge-tree-section {
+    background: rgba(30, 41, 59, 0.5);
+    border-radius: 20px;
+    padding: 40px;
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+}
+
+.knowledge-tree {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+/* 树节点 */
+.tree-node {
+    background: rgba(15, 23, 42, 0.3);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.tree-node.root {
+    background: rgba(99, 102, 241, 0.1);
+    border-color: var(--primary-color);
+}
+
+.tree-node.branch {
+    margin-left: 30px;
+    margin-top: 10px;
+    background: rgba(15, 23, 42, 0.2);
+}
+
+.tree-node:hover {
+    border-color: var(--primary-color);
+}
+
+.node-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s ease;
+}
+
+.node-header:hover {
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.node-icon {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    width: 30px;
+    text-align: center;
+}
+
+.tree-node.root .node-icon {
+    font-size: 2rem;
+}
+
+.node-header h3,
+.node-header h4 {
+    flex: 1;
+    margin: 0;
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+.node-header h3 {
+    font-size: 1.5rem;
+}
+
+.node-header h4 {
+    font-size: 1.2rem;
+}
+
+.node-progress {
+    display: flex;
+    align-items: center;
+}
+
+.progress-badge {
+    background: rgba(99, 102, 241, 0.2);
+    color: var(--primary-color);
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: 1px solid var(--primary-color);
+}
+
+.toggle-icon {
+    color: var(--text-muted);
+    transition: transform 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.tree-node.expanded .toggle-icon {
+    transform: rotate(180deg);
+}
+
+.node-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+}
+
+.tree-node.expanded .node-content {
+    max-height: 5000px;
+}
+
+/* 知识点项 */
+.knowledge-item {
+    padding: 15px 20px;
+    border-top: 1px solid var(--border-color);
+    transition: background 0.2s ease;
+}
+
+.knowledge-item:hover {
+    background: rgba(99, 102, 241, 0.05);
+}
+
+.item-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+}
+
+.item-header .item-actions,
+.item-header .item-actions * {
+    cursor: default;
+    pointer-events: auto;
+}
+
+.item-header .item-actions select,
+.item-header .item-actions button {
+    cursor: pointer;
+}
+
+.item-toggle-icon {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    transition: transform 0.3s ease;
+    width: 16px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.knowledge-item.expanded .item-toggle-icon {
+    transform: rotate(90deg);
+}
+
+.item-note {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease, margin 0.3s ease, border 0.3s ease;
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+}
+
+.knowledge-item.expanded .item-note {
+    max-height: 500px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px dashed var(--border-color);
+}
+
+.item-title {
+    flex: 1;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.item-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.status-select {
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: rgba(15, 23, 42, 0.5);
+    color: var(--text-color);
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+}
+
+.status-select:hover {
+    border-color: var(--primary-color);
+}
+
+.status-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
+}
+
+/* 状态样式 */
+.knowledge-item[data-status="completed"] {
+    background: rgba(34, 197, 94, 0.1);
+    border-left: 3px solid #22c55e;
+}
+
+.knowledge-item[data-status="in-progress"] {
+    background: rgba(251, 191, 36, 0.1);
+    border-left: 3px solid #fbbf24;
+}
+
+.knowledge-item[data-status="not-started"] {
+    border-left: 3px solid transparent;
+}
+
+.note-btn {
+    background: rgba(99, 102, 241, 0.2);
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.note-btn:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: scale(1.1);
+}
+
+.note-btn.has-note {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* 笔记区域 */
+
+.note-textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: rgba(15, 23, 42, 0.5);
+    color: var(--text-color);
+    font-family: inherit;
+    font-size: 0.9rem;
+    resize: vertical;
+    transition: border-color 0.3s ease;
+}
+
+.note-textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
+}
+
+.save-note-btn {
+    margin-top: 10px;
+    padding: 8px 20px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.save-note-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 浅色模式 */
+body[data-theme="light"] .learning-path-section,
+body[data-theme="light"] .knowledge-tree-section,
+body[data-theme="light"] .progress-summary {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+body[data-theme="light"] .tree-node {
+    background: rgba(248, 250, 252, 0.6);
+}
+
+body[data-theme="light"] .tree-node.root {
+    background: rgba(99, 102, 241, 0.1);
+}
+
+body[data-theme="light"] .knowledge-item {
+    border-top-color: #e2e8f0;
+}
+
+body[data-theme="light"] .note-textarea {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .learning-title {
+        font-size: 2rem;
+    }
+
+    .path-flow {
+        flex-direction: column;
+    }
+
+    .path-arrow {
+        transform: rotate(90deg);
+    }
+
+    .path-stage {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .tree-node.branch {
+        margin-left: 15px;
+    }
+
+    .item-header {
+        flex-wrap: wrap;
+    }
+
+    .item-actions {
+        width: 100%;
+        justify-content: flex-end;
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .learning-container {
+        padding: 80px 15px 60px;
+    }
+
+    .learning-path-section,
+    .knowledge-tree-section {
+        padding: 25px 15px;
+    }
+
+    .node-header {
+        padding: 15px;
+        flex-wrap: wrap;
+    }
+
+    .node-icon {
+        font-size: 1.2rem;
+    }
+
+    .tree-node.root .node-icon {
+        font-size: 1.5rem;
+    }
+}
+

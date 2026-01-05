@@ -1,0 +1,15 @@
+# 如何运行本地服务器
+
+
+方法一：双击运行bat，打开http://localhost:8000     才可以显示LRC歌词
+由于浏览器的安全策略，直接打开 HTML 文件（file:// 协议）无法加载 LRC 歌词文件。需要使用本地服务器来运行网站。
+
+
+
+
+
+方法二：使用 VS Code Live Server 扩展
+
+1. 在 VS Code 中安装 "Live Server" 扩展
+2. 右键点击 `first.html`
+3. 选择 "Open with Live Server"
